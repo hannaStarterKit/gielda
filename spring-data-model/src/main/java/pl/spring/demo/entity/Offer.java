@@ -22,6 +22,9 @@ public class Offer implements Serializable {
 
 	@Column(nullable = false, name = "offer_type")
 	private String offerType;
+	
+	@Column(nullable = false, name = "stock_name", length=30)
+	private String stockName;
 
 	@Column(nullable = false, name = "player_id")
 	private Long playerId;
@@ -39,13 +42,14 @@ public class Offer implements Serializable {
 	protected Offer() {
 	}
 
-	public Offer(boolean finished, String offerType, Long playerId, BigDecimal stockPrice, int stockQuantity,
+	public Offer(boolean finished, String offerType, Long playerId, BigDecimal stockPrice, int stockQuantity, String stockName,
 			Broker broker) {
 		this.finished = finished;
 		this.offerType = offerType;
 		this.playerId = playerId;
 		this.stockPrice = stockPrice;
 		this.stockQuantity = stockQuantity;
+		this.stockName = stockName;
 		this.broker = broker;
 	}
 
@@ -103,6 +107,14 @@ public class Offer implements Serializable {
 
 	public void setBroker(Broker broker) {
 		this.broker = broker;
+	}
+	
+	public String getStockName() {
+		return stockName;
+	}
+
+	public void setStockName(String stockName) {
+		this.stockName = stockName;
 	}
 
 }
