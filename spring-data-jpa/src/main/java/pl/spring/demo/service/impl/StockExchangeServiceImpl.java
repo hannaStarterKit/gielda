@@ -18,6 +18,7 @@ import pl.spring.demo.dao.StockDao;
 import pl.spring.demo.entity.StockEntity;
 import pl.spring.demo.money.MonetaryUnit;
 import pl.spring.demo.money.Money;
+import pl.spring.demo.service.DateService;
 import pl.spring.demo.service.StockExchangeService;
 
 @Service
@@ -59,7 +60,7 @@ public class StockExchangeServiceImpl implements StockExchangeService {
 	
 	//TODO
 	private LocalDate getCurrentDate(){
-		return dateService. getCurrentdate();
+		return dateService.getCurrentDate();
 	}
 
 	private void stockValidator(StockEntity stock) {

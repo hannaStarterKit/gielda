@@ -4,6 +4,7 @@
 package pl.spring.demo.service.impl;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import pl.spring.demo.service.BrokerService;
 import pl.spring.demo.service.StockExchangeService;
 import pl.spring.demo.player.OfferType;
 import pl.spring.demo.player.PlayerOffer;
+import pl.spring.demo.player.PlayerStock;
 
 /**
  * @author HSIENKIE
@@ -37,8 +39,8 @@ public class BrokerServiceImpl implements BrokerService {
 	@Autowired
 	private BrokerDao brokerDao;
 
-	@Autowired
-	private OfferDao offerDao;
+//	@Autowired
+//	private OfferDao offerDao;
 
 	@Override
 	@Transactional(readOnly = false)
@@ -54,7 +56,7 @@ public class BrokerServiceImpl implements BrokerService {
 
 	@Override
 	public List<OfferEntity> offer(List<PlayerOffer> playerOffers, Long playerId, Long brokerId) {
-		List<OfferEntity> offers= this.calculateOffers(playerOffers, brokerId, playerId);
+		List<OfferEntity> offers = this.calculateOffers(playerOffers, brokerId, playerId);
 		return offers;
 	}
 
@@ -73,15 +75,26 @@ public class BrokerServiceImpl implements BrokerService {
 	}
 
 	private int calculateQuantityOfOrder(int quantity, Long brokerId) {
-		return (int) quantity
-				* randInt(brokerDao.getOrderQuantityLower(brokerId), brokerDao.getOrderQuantityUpper(brokerId)) / 100;
+		int lower = 0;
+		int upper = 0;
+		int quantityCalculated = quantity*(lower + (int) (Math.random() * ((upper - lower) + 1)))/100;
+		return (int) quantityCalculated;
 	}
 
 	private BigDecimal calculateCommission(BigDecimal price, Long brokerId, OfferType offerType) {
-		BigDecimal newPrice = price
-				* randInt(brokerDao.getCommissionOfSalesLower(brokerId), brokerDao.getCommissionOfSalesUpper(brokerId))
-				/ 100;
-		return newPrice.setScale(2, RoundingMode.CEILING);
+		MathContext mc = new MathContext(2);
+		int lower = 0;
+		int upper = 0;
+		BigDecimal commission;
+		if (offerType == OfferType.BUYING) {
+			lower = brokerDao.getCommissionOfBuyingLower(brokerId);
+			upper = brokerDao.getCommissionOfBuyingUpper(brokerId);
+		} else {
+			lower = brokerDao.getCommissionOfSaleLower(brokerId);
+			upper = brokerDao.getCommissionOfSaleUpper(brokerId);
+		}
+		commission = new BigDecimal((lower + (int) (Math.random() * ((upper - lower) + 1)))/100);
+		return price.multiply(commission, mc);
 	}
 
 	private List<OfferEntity> calculateOffers(List<PlayerOffer> playerOffers, Long brokerId, Long playerId) {
@@ -99,10 +112,13 @@ public class BrokerServiceImpl implements BrokerService {
 			priceWithCommission = this.calculateCommission(currentPrice, brokerId, offerType);
 			stockQuantity = this.calculateQuantityOfOrder(stockQuantity, brokerId);
 			boolean finished = false;
-			OfferEntity offer = new OfferEntity(finished, offerType, playerId, priceWithCommission, stockQuantity, stockName, broker);
-			OfferEntity offerSaved = offerDao.save(entity);
-			offers.add(offerSaved);
+			OfferEntity offer = new OfferEntity(finished, offerType, playerId, priceWithCommission, stockQuantity,
+					stockName, broker);
+			//OfferEntity offerSaved = offerDao.save(offer);
+			//offers.add(offerSaved);
+			offers.add(offer);
 		}
+		return offers;
 	}
 
 }

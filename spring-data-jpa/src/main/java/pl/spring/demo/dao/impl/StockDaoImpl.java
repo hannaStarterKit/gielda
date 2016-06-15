@@ -21,7 +21,7 @@ public class StockDaoImpl extends AbstractDao<StockEntity, Long> implements Stoc
 	public List<StockEntity> findStocksByNameAndDate(String name, Date startDate, Date currentDate) {
 		return entityManager
 				.createQuery(
-						"from StockEntity stock where upper(stock.name) like concat('%', upper(:name), '%') and stock.date <= currentDate and stockdate >= startDate",
+						"from StockEntity stock where upper(stock.name) like concat('%', upper(:name), '%') and stock.date <= :currentDate and stockdate >= :startDate",
 						StockEntity.class)
 				.setParameter("name", name).setParameter("currentDate", currentDate)
 				.setParameter("startDate", startDate).getResultList();
@@ -31,7 +31,7 @@ public class StockDaoImpl extends AbstractDao<StockEntity, Long> implements Stoc
 	public BigDecimal getCurrentPrice(String stockName, Date currentDate) {
 		return entityManager
 				.createQuery(
-						"from StockEntity stock where upper(stock.name) = upper(:name) and stock.date = currentDate",
+						"from StockEntity stock where upper(stock.name) = upper(:name) and stock.date = :currentDate",
 						StockEntity.class)
 				.setParameter("name", stockName).setParameter("currentDate", currentDate).getSingleResult().getPrice();
 	}

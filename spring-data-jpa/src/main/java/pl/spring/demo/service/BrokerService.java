@@ -8,6 +8,7 @@ import java.util.List;
 import pl.spring.demo.entity.BrokerEntity;
 import pl.spring.demo.entity.OfferEntity;
 import pl.spring.demo.player.PlayerOffer;
+import pl.spring.demo.player.PlayerStock;
 
 /**
  * @author HSIENKIE
