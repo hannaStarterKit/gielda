@@ -3,7 +3,7 @@ package pl.spring.demo.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 
-import pl.spring.demo.player.OfferType;
+import pl.spring.demo.playerModel.OfferType;
 
 import java.math.BigDecimal;
 
@@ -25,7 +25,7 @@ public class OfferEntity implements Serializable {
 	private boolean finished;
 
 	@Column(nullable = false, name = "offer_type")
-	private OfferType offerType;
+	private String offerType;
 	
 	@Column(nullable = false, name = "stock_name", length=30)
 	private String stockName;
@@ -46,10 +46,11 @@ public class OfferEntity implements Serializable {
 	protected OfferEntity() {
 	}
 
-	public OfferEntity(boolean finished, OfferType offerType, Long playerId, BigDecimal stockPrice, int stockQuantity, String stockName,
+	public OfferEntity(Long id, boolean finished, OfferType offerType, Long playerId, BigDecimal stockPrice, int stockQuantity, String stockName,
 			BrokerEntity broker) {
+		this.id = id;
 		this.finished = finished;
-		this.offerType = offerType;
+		this.offerType = offerType.toString();
 		this.playerId = playerId;
 		this.stockPrice = stockPrice;
 		this.stockQuantity = stockQuantity;
@@ -74,11 +75,11 @@ public class OfferEntity implements Serializable {
 	}
 
 	public OfferType getOfferType() {
-		return this.offerType;
+		return OfferType.valueOf(this.offerType);
 	}
 
 	public void setOfferType(OfferType offerType) {
-		this.offerType = offerType;
+		this.offerType = offerType.toString();
 	}
 
 	public Long getPlayerId() {

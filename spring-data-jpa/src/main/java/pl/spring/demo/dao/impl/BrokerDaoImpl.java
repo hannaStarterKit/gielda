@@ -6,8 +6,8 @@ package pl.spring.demo.dao.impl;
 import java.util.List;
 
 import pl.spring.demo.dao.BrokerDao;
-import pl.spring.demo.player.PlayerStock;
 import pl.spring.demo.entity.BrokerEntity;
+import pl.spring.demo.playerModel.PlayerStock;
 
 /**
  * @author HSIENKIE

@@ -17,7 +17,7 @@
     <appender-ref ref="CONSOLE_APPENDER" />
     </logger>
 
-    <!-- By default, the level of the root level is set to INFO -->
+    By default, the level of the root level is set to INFO
     <root level="INFO">
         <appender-ref ref="CONSOLE_APPENDER" />
     </root>

@@ -20,8 +20,8 @@ import pl.spring.demo.dao.AccountDao;
 import pl.spring.demo.entity.AccountEntity;
 import pl.spring.demo.entity.BrokerEntity;
 import pl.spring.demo.entity.OfferEntity;
-import pl.spring.demo.player.OfferType;
-import pl.spring.demo.player.PlayerOffer;
+import pl.spring.demo.playerModel.OfferType;
+import pl.spring.demo.playerModel.PlayerOffer;
 
 /**
  * @author HSIENKIE
@@ -29,7 +29,7 @@ import pl.spring.demo.player.PlayerOffer;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "CommonServiceTest-context.xml")
-public class BrokerServiceTest {
+public class BrokerServiceImplTest {
 
 	@Autowired
 	private BrokerService brokerService;
@@ -37,6 +37,7 @@ public class BrokerServiceTest {
 	@Autowired
 	private AccountDao accountDao;
 
+	
 	@Test
 	public void testShouldSaveOffer() {
 		// given
@@ -47,7 +48,7 @@ public class BrokerServiceTest {
 		List<PlayerOffer> playerOffers = new LinkedList<>();
 		playerOffers.add(playerOffer);
 		final Long playerId = 1L;
-		final Long brokerId = 1L;
+		final Long brokerId = 5L;
 		// when
 		List<OfferEntity> offers = brokerService.offer(playerOffers, playerId, brokerId);
 		// then

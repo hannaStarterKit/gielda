@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.spring.demo.player;
+package pl.spring.demo.playerModel;
 
 import javax.persistence.Column;
 

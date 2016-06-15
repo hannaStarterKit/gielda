@@ -18,12 +18,12 @@ import pl.spring.demo.dao.OfferDao;
 import pl.spring.demo.entity.BrokerEntity;
 import pl.spring.demo.entity.OfferEntity;
 import pl.spring.demo.money.Money;
+import pl.spring.demo.playerModel.OfferType;
+import pl.spring.demo.playerModel.PlayerOffer;
+import pl.spring.demo.playerModel.PlayerStock;
 import pl.spring.demo.service.BrokerService;
-
+import pl.spring.demo.service.OfferService;
 import pl.spring.demo.service.StockExchangeService;
-import pl.spring.demo.player.OfferType;
-import pl.spring.demo.player.PlayerOffer;
-import pl.spring.demo.player.PlayerStock;
 
 /**
  * @author HSIENKIE
@@ -39,8 +39,8 @@ public class BrokerServiceImpl implements BrokerService {
 	@Autowired
 	private BrokerDao brokerDao;
 
-//	@Autowired
-//	private OfferDao offerDao;
+	@Autowired
+	private OfferService offerService;
 
 	@Override
 	@Transactional(readOnly = false)
@@ -75,8 +75,8 @@ public class BrokerServiceImpl implements BrokerService {
 	}
 
 	private int calculateQuantityOfOrder(int quantity, Long brokerId) {
-		int lower = 0;
-		int upper = 0;
+		int lower = brokerDao.getOrderQuantityLower(brokerId);
+		int upper = brokerDao.getOrderQuantityUpper(brokerId);
 		int quantityCalculated = quantity*(lower + (int) (Math.random() * ((upper - lower) + 1)))/100;
 		return (int) quantityCalculated;
 	}
@@ -107,16 +107,16 @@ public class BrokerServiceImpl implements BrokerService {
 		List<OfferEntity> offers = new ArrayList<>();
 		for (PlayerOffer playerOffer : playerOffers) {
 			stockName = playerOffer.getStockName();
+			stockQuantity = playerOffer.getStockQuantity();
 			currentPrice = this.getCurrentPrice(stockName).getValue();
 			offerType = playerOffer.getOfferType();
 			priceWithCommission = this.calculateCommission(currentPrice, brokerId, offerType);
 			stockQuantity = this.calculateQuantityOfOrder(stockQuantity, brokerId);
 			boolean finished = false;
-			OfferEntity offer = new OfferEntity(finished, offerType, playerId, priceWithCommission, stockQuantity,
+			OfferEntity offer = new OfferEntity(null, finished, offerType, playerId, priceWithCommission, stockQuantity,
 					stockName, broker);
-			//OfferEntity offerSaved = offerDao.save(offer);
-			//offers.add(offerSaved);
-			offers.add(offer);
+			OfferEntity offerSaved = offerService.save(offer);
+			offers.add(offerSaved);
 		}
 		return offers;
 	}
