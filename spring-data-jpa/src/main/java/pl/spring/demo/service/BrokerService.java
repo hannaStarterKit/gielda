@@ -5,7 +5,8 @@ package pl.spring.demo.service;
 
 import java.util.List;
 
-import pl.spring.demo.entity.Offer;
+import pl.spring.demo.entity.BrokerEntity;
+import pl.spring.demo.entity.OfferEntity;
 import pl.spring.demo.player.PlayerOffer;
 
 /**
@@ -14,9 +15,13 @@ import pl.spring.demo.player.PlayerOffer;
  */
 public interface BrokerService {
 	
-	List<Offer> offer(List<PlayerOffer> playerOffers, long playerId, long brokerId);
+	List<OfferEntity> offer(List<PlayerOffer> playerOffers, Long playerId, Long brokerId);
 
-	List<PlayerStock> getMyStocks(long playerId, long brokerId);
+	List<PlayerStock> getMyStocks(Long playerId, Long brokerId);
 	
-	long getAccountid(long brokerId);
+	Long getAccountid(Long brokerId);
+	
+	BrokerEntity saveBroker(BrokerEntity broker);
+
+	void deleteBroker(BrokerEntity broker);
 }

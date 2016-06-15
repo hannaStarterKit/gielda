@@ -6,48 +6,48 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-
 /**
  * The persistent class for the broker database table.
  * 
  */
 @Entity
 @Table(name = "BROKER")
-@NamedQuery(name="Broker.findAll", query="SELECT b FROM Broker b")
-public class Broker implements Serializable {
+@NamedQuery(name = "BrokerEntity.findAll", query = "SELECT b FROM BrokerEntity b")
+public class BrokerEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(nullable = false, name="account_id")
-	private Long accountId;
+	@ManyToOne
+	@JoinColumn(name = "account_id", nullable = false)
+	private AccountEntity account;
 
-	@Column(nullable = false, name="buying_commission_lower")
+	@Column(nullable = false, name = "buying_commission_lower")
 	private int buyingCommissionLower;
 
-	@Column(nullable = false, name="buying_commission_upper")
+	@Column(nullable = false, name = "buying_commission_upper")
 	private int buyingCommissionUpper;
 
-	@Column(nullable = false, name="order_quantity_lower")
+	@Column(nullable = false, name = "order_quantity_lower")
 	private int orderQuantityLower;
 
-	@Column(nullable = false, name="order_quantity_upper")
+	@Column(nullable = false, name = "order_quantity_upper")
 	private int orderQuantityUpper;
 
-	@Column(nullable = false, name="sale_commission_lower")
+	@Column(nullable = false, name = "sale_commission_lower")
 	private int saleCommissionLower;
 
-	@Column(nullable = false, name="sale_commission_upper")
-	private int saleCommissionUpper;	
+	@Column(nullable = false, name = "sale_commission_upper")
+	private int saleCommissionUpper;
 
-	@OneToMany(mappedBy = "broker", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)	
-	private Set<Offer> offers = new HashSet<>();
-	
-	public Broker(Long id, Long accountId, int buyingCommissionLower, int buyingCommissionUpper, int orderQuantityLower,
-			int orderQuantityUpper, int saleCommissionLower, int saleCommissionUpper) {
+	@OneToMany(mappedBy = "broker", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private Set<OfferEntity> offers = new HashSet<>();
+
+	public BrokerEntity(Long id, AccountEntity account, int buyingCommissionLower, int buyingCommissionUpper,
+			int orderQuantityLower, int orderQuantityUpper, int saleCommissionLower, int saleCommissionUpper) {
 		this.id = id;
-		this.accountId = accountId;
+		this.account = account;
 		this.buyingCommissionLower = buyingCommissionLower;
 		this.buyingCommissionUpper = buyingCommissionUpper;
 		this.orderQuantityLower = orderQuantityLower;
@@ -56,7 +56,15 @@ public class Broker implements Serializable {
 		this.saleCommissionUpper = saleCommissionUpper;
 	}
 
-	protected Broker() {
+	protected BrokerEntity() {
+	}
+	
+	public AccountEntity getAccount() {
+		return account;
+	}
+
+	public void setAccount(AccountEntity account) {
+		this.account = account;
 	}
 
 	public Long getId() {
@@ -65,14 +73,6 @@ public class Broker implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getAccountId() {
-		return this.accountId;
-	}
-
-	public void setAccountId(Long accountId) {
-		this.accountId = accountId;
 	}
 
 	public int getBuyingCommissionLower() {
@@ -122,27 +122,13 @@ public class Broker implements Serializable {
 	public void setSaleCommissionUpper(int saleCommissionUpper) {
 		this.saleCommissionUpper = saleCommissionUpper;
 	}
-//
-//	public List<Offer> getOffers() {
-//		return this.offers;
-//	}
-//
-//	public void setOffers(List<Offer> offers) {
-//		this.offers = offers;
-//	}
-//
-//	public Offer addOffer(Offer offer) {
-//		getOffers().add(offer);
-//		offer.setBroker(this);
-//
-//		return offer;
-//	}
-//
-//	public Offer removeOffer(Offer offer) {
-//		getOffers().remove(offer);
-//		offer.setBroker(null);
-//
-//		return offer;
-//	}
+
+	public Set<OfferEntity> getOffers() {
+		return offers;
+	}
+
+	public void setOffers(Set<OfferEntity> offers) {
+		this.offers = offers;
+	}
 
 }

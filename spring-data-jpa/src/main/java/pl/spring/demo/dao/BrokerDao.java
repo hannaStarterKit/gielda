@@ -3,12 +3,15 @@
  */
 package pl.spring.demo.dao;
 
-import pl.spring.demo.entity.Broker;
+import java.util.List;
+
+import pl.spring.demo.entity.BrokerEntity;
+import pl.spring.demo.player.PlayerOffer;
 
 /**
  * @author HSIENKIE
  *
  */
-public interface BrokerDao extends Dao<Broker, Long> {
+public interface BrokerDao extends Dao<BrokerEntity, Long> {
 
 }

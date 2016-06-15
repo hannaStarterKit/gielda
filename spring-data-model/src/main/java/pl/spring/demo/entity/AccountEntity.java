@@ -3,6 +3,8 @@ package pl.spring.demo.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -10,8 +12,9 @@ import java.math.BigDecimal;
  * 
  */
 @Entity
-@NamedQuery(name="Account.findAll", query="SELECT a FROM Account a")
-public class Account implements Serializable {
+@Table(name = "ACCOUNT")
+@NamedQuery(name="AccountEntity.findAll", query="SELECT a FROM AccountEntity a")
+public class AccountEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -22,8 +25,11 @@ public class Account implements Serializable {
 
 	@Column(nullable = false, name="monetary_unit")
 	private String monetaryUnit;
+	
+	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private Set<BrokerEntity> brokers = new HashSet<>();
 
-	protected Account() {
+	protected AccountEntity() {
 	}
 
 	public Long getId() {

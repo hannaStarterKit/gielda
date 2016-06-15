@@ -7,25 +7,32 @@
 	<import resource="../common_configuration/CommonDatabase-context.xml" />
 	<import resource="../common_configuration/CommonSpring-context.xml" />
 
-<!-- 	<bean id="ProjectDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+ 	<bean id="BrokerDao" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<bean class="pl.spring.demo.dao.impl.ProjectDaoImpl">
+			<bean class="pl.spring.demo.dao.impl.BrokerDaoImpl">
 			</bean>
 		</property>
 	</bean>
 	
-	<bean id="employeeDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+	<bean id="StockDao" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<bean class="pl.spring.demo.dao.impl.EmployeeDaoImpl">
+			<bean class="pl.spring.demo.dao.impl.StockDaoImpl">
 			</bean>
 		</property>
 	</bean>
-
- 	<bean id="projectPropertyDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+	
+	<bean id="AccountDao" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="target">
-			<bean class="pl.spring.demo.dao.impl.ProjectPropertyDaoImpl">
+			<bean class="pl.spring.demo.dao.impl.AccountDaoImpl">
 			</bean>
 		</property>
-	</bean> -->
-
+	</bean>
+	
+	<bean id="OfferDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<bean class="pl.spring.demo.dao.impl.OfferDaoImpl">
+			</bean>
+		</property>
+	</bean>
+	
 </beans>

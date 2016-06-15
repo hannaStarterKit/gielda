@@ -5,22 +5,30 @@ package pl.spring.demo.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.spring.demo.dao.BrokerDao;
-import pl.spring.demo.entity.Offer;
+import pl.spring.demo.dao.OfferDao;
+import pl.spring.demo.entity.BrokerEntity;
+import pl.spring.demo.entity.OfferEntity;
 import pl.spring.demo.money.Money;
 import pl.spring.demo.service.BrokerService;
 
 import pl.spring.demo.service.StockExchangeService;
+import pl.spring.demo.player.OfferType;
 import pl.spring.demo.player.PlayerOffer;
 
 /**
  * @author HSIENKIE
  *
  */
+@Service
+@Transactional(readOnly = true)
 public class BrokerServiceImpl implements BrokerService {
 
 	@Autowired
@@ -29,35 +37,72 @@ public class BrokerServiceImpl implements BrokerService {
 	@Autowired
 	private BrokerDao brokerDao;
 
+	@Autowired
+	private OfferDao offerDao;
+
 	@Override
-	public List<Offer> offer(List<PlayerOffer> playerOffers, long playerId, long brokerId) {
-		return brokerDao.offer(List<PlayerOffer> playerOffers, playerId, brokerId);
+	@Transactional(readOnly = false)
+	public BrokerEntity saveBroker(BrokerEntity broker) {
+		return brokerDao.save(broker);
 	}
 
 	@Override
-	public List<PlayerStock> getMyStocks(long playerId, long brokerId) {
+	@Transactional(readOnly = false)
+	public void deleteBroker(BrokerEntity broker) {
+		brokerDao.delete(broker);
+	}
+
+	@Override
+	public List<OfferEntity> offer(List<PlayerOffer> playerOffers, Long playerId, Long brokerId) {
+		List<OfferEntity> offers= this.calculateOffers(playerOffers, brokerId, playerId);
+		return offers;
+	}
+
+	@Override
+	public List<PlayerStock> getMyStocks(Long playerId, Long brokerId) {
 		return brokerDao.getStocksByPlayerAndBrokerId(playerId, brokerId);
 	}
 
 	@Override
-	public long getAccountid(long brokerId) {
+	public Long getAccountid(Long brokerId) {
 		return brokerDao.getAccountId(brokerId);
 	}
 
-	private Money getCurrentprice(String name) {
+	private Money getCurrentPrice(String name) {
 		return stockExchangeService.getCurrentPrice(name);
 	}
 
-	private int calculateQuantityOfOrder(int quantity, long brokerId) {
+	private int calculateQuantityOfOrder(int quantity, Long brokerId) {
 		return (int) quantity
 				* randInt(brokerDao.getOrderQuantityLower(brokerId), brokerDao.getOrderQuantityUpper(brokerId)) / 100;
 	}
 
-	private BigDecimal calculateCommissionOfSale(BigDecimal price, long brokerId) {
+	private BigDecimal calculateCommission(BigDecimal price, Long brokerId, OfferType offerType) {
 		BigDecimal newPrice = price
 				* randInt(brokerDao.getCommissionOfSalesLower(brokerId), brokerDao.getCommissionOfSalesUpper(brokerId))
 				/ 100;
 		return newPrice.setScale(2, RoundingMode.CEILING);
+	}
+
+	private List<OfferEntity> calculateOffers(List<PlayerOffer> playerOffers, Long brokerId, Long playerId) {
+		BigDecimal priceWithCommission = BigDecimal.valueOf(0);
+		BigDecimal currentPrice = BigDecimal.valueOf(0);
+		String stockName = "";
+		int stockQuantity = 0;
+		OfferType offerType;
+		BrokerEntity broker = brokerDao.findOne(brokerId);
+		List<OfferEntity> offers = new ArrayList<>();
+		for (PlayerOffer playerOffer : playerOffers) {
+			stockName = playerOffer.getStockName();
+			currentPrice = this.getCurrentPrice(stockName).getValue();
+			offerType = playerOffer.getOfferType();
+			priceWithCommission = this.calculateCommission(currentPrice, brokerId, offerType);
+			stockQuantity = this.calculateQuantityOfOrder(stockQuantity, brokerId);
+			boolean finished = false;
+			OfferEntity offer = new OfferEntity(finished, offerType, playerId, priceWithCommission, stockQuantity, stockName, broker);
+			OfferEntity offerSaved = offerDao.save(entity);
+			offers.add(offerSaved);
+		}
 	}
 
 }

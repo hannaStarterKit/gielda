@@ -3,16 +3,13 @@
  */
 package pl.spring.demo.dao.impl;
 
-
-
 import pl.spring.demo.dao.OfferDao;
-import pl.spring.demo.entity.Offer;
+import pl.spring.demo.entity.OfferEntity;
 
 /**
  * @author HSIENKIE
  *
  */
-public class OfferDaoImpl extends AbstractDao<Offer, Long> implements OfferDao {
-
+public class OfferDaoImpl extends AbstractDao<OfferEntity, Long> implements OfferDao {
 
 }

@@ -1,4 +1,4 @@
-package pl.spring.demo.dao;
+package pl.spring.demo.repository;
 
 
 import org.junit.Ignore;
@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import pl.spring.demo.entity.AccountEntity;
-import pl.spring.demo.entity.BrokerEntity;
+import pl.spring.demo.entity.Account;
+
+import pl.spring.demo.entity.Broker;
 import pl.spring.demo.repository.AccountRepository;
 import pl.spring.demo.repository.BrokerRepository;
 
@@ -19,18 +20,23 @@ import java.math.BigDecimal;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "CommonDaoTest-context.xml")
-public class BrokerDaoImplTest {
+@ContextConfiguration(locations = "CommonRepositoryTest-context.xml")
+public class BrokerRepositoryTest {
 
-	@Autowired
-	private BrokerDao brokerDao;
-	
-
-	@Autowired
-	private OfferDao offerDao;
+//	@Autowired
+//	private BrokerDao brokerDao;
 	
 	@Autowired
-	private AccountDao accountDao;
+	private BrokerRepository brokerRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
+//
+//	@Autowired
+//	private OfferDao offerDao;
+//	
+//	@Autowired
+//	private AccountDao accountDao;
 
 //	@Test
 //	@Ignore
@@ -71,10 +77,10 @@ public class BrokerDaoImplTest {
 	
 	@Test
 	public void testSave2(){
-		AccountEntity account = accountDao.findOne(1L);
-		BrokerEntity broker = new BrokerEntity(null, account, 98, 100, 100, 102, 100, 700);
-		BrokerEntity brokerSaved = brokerDao.save(broker);
-		BrokerEntity brokerFinded = brokerDao.findOne(brokerSaved.getId());
+		Account account = accountRepository.findOne(1L);
+		Broker broker = new Broker(null, 700, 98, 100, 100, 102, 100, account);;
+		Broker brokerSaved = brokerRepository.saveAndFlush(broker);
+		Broker brokerFinded = brokerRepository.findOne(brokerSaved.getId());
 		assertNotNull(brokerFinded);
 	}
 

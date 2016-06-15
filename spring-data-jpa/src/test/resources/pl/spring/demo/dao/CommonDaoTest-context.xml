@@ -8,5 +8,6 @@
 
     <bean id="brokerDao" class="pl.spring.demo.dao.impl.BrokerDaoImpl" />
     <bean id="offerDao" class="pl.spring.demo.dao.impl.OfferDaoImpl" />
+    <bean id="accountDao" class="pl.spring.demo.dao.impl.AccountDaoImpl" />
 
 </beans>

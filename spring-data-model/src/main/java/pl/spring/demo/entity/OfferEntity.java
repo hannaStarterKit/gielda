@@ -2,6 +2,9 @@ package pl.spring.demo.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import pl.spring.demo.player.OfferType;
+
 import java.math.BigDecimal;
 
 /**
@@ -10,18 +13,19 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "OFFER")
-@NamedQuery(name = "Offer.findAll", query = "SELECT o FROM Offer o")
-public class Offer implements Serializable {
+@NamedQuery(name = "OfferEntity.findAll", query = "SELECT o FROM OfferEntity o")
+public class OfferEntity implements Serializable {
 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Column(nullable = false, name = "finished")
 	private boolean finished;
 
 	@Column(nullable = false, name = "offer_type")
-	private String offerType;
+	private OfferType offerType;
 	
 	@Column(nullable = false, name = "stock_name", length=30)
 	private String stockName;
@@ -37,13 +41,13 @@ public class Offer implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "broker_id")
-	private Broker broker;
+	private BrokerEntity broker;
 
-	protected Offer() {
+	protected OfferEntity() {
 	}
 
-	public Offer(boolean finished, String offerType, Long playerId, BigDecimal stockPrice, int stockQuantity, String stockName,
-			Broker broker) {
+	public OfferEntity(boolean finished, OfferType offerType, Long playerId, BigDecimal stockPrice, int stockQuantity, String stockName,
+			BrokerEntity broker) {
 		this.finished = finished;
 		this.offerType = offerType;
 		this.playerId = playerId;
@@ -69,11 +73,11 @@ public class Offer implements Serializable {
 		this.finished = finished;
 	}
 
-	public String getOfferType() {
+	public OfferType getOfferType() {
 		return this.offerType;
 	}
 
-	public void setOfferType(String offerType) {
+	public void setOfferType(OfferType offerType) {
 		this.offerType = offerType;
 	}
 
@@ -101,11 +105,11 @@ public class Offer implements Serializable {
 		this.stockQuantity = stockQuantity;
 	}
 
-	public Broker getBroker() {
+	public BrokerEntity getBroker() {
 		return this.broker;
 	}
 
-	public void setBroker(Broker broker) {
+	public void setBroker(BrokerEntity broker) {
 		this.broker = broker;
 	}
 	

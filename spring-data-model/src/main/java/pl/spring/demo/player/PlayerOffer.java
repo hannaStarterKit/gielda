@@ -11,23 +11,23 @@ import javax.persistence.Column;
  */
 public class PlayerOffer {
 
-	private String offerType;
+	private OfferType offerType;
 
 	private String stockName;
 
 	private int stockQuantity;
 
-	public PlayerOffer(String offerType, String stockName, int stockQuantity) {
+	public PlayerOffer(OfferType offerType, String stockName, int stockQuantity) {
 		this.offerType = offerType;
 		this.stockName = stockName;
 		this.stockQuantity = stockQuantity;
 	}
 
-	public String getOfferType() {
+	public OfferType getOfferType() {
 		return offerType;
 	}
 
-	public void setOfferType(String offerType) {
+	public void setOfferType(OfferType offerType) {
 		this.offerType = offerType;
 	}
 

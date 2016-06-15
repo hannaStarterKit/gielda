@@ -26,6 +26,9 @@ public class StockExchangeServiceImpl implements StockExchangeService {
 
 	@Autowired
 	private StockDao stockDao;
+	
+	@Autowired
+	private DateService dateService;
 
 	@Override
 	@Transactional(readOnly = false)
@@ -35,21 +38,13 @@ public class StockExchangeServiceImpl implements StockExchangeService {
 	}
 
 	@Override
-	public StockEntity findOne(long id) {
+	public StockEntity findOne(Long id) {
 		return stockDao.findOne(id);
 	}
 
-	@Override
-	public void stockValidator(StockEntity stock) {
-		ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
-		Set<ConstraintViolation<StockEntity>> violationSet = vf.getValidator().validate(stock);
-		for (ConstraintViolation<StockEntity> cv : violationSet) {
-			throw new IllegalArgumentException(cv.getMessage());
-		}
-	}
 
 	@Override
-	public List<StockEntity> findStockByNameAndTime(String name, long numberOfDaysBefore) {
+	public List<StockEntity> findStockByNameAndTime(String name, int numberOfDaysBefore) {
 		LocalDate currentDate = this.getCurrentDate();
 		LocalDate startDate = currentDate.plusDays(numberOfDaysBefore);
 		return stockDao.findStocksByNameAndDate(name, Date.valueOf(startDate), Date.valueOf(currentDate));
@@ -64,7 +59,14 @@ public class StockExchangeServiceImpl implements StockExchangeService {
 	
 	//TODO
 	private LocalDate getCurrentDate(){
-		return null;
+		return dateService. getCurrentdate();
 	}
 
+	private void stockValidator(StockEntity stock) {
+		ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
+		Set<ConstraintViolation<StockEntity>> violationSet = vf.getValidator().validate(stock);
+		for (ConstraintViolation<StockEntity> cv : violationSet) {
+			throw new IllegalArgumentException(cv.getMessage());
+		}
+	}
 }
