@@ -62,7 +62,7 @@ public class BrokerServiceImpl implements BrokerService {
 
 	@Override
 	public List<PlayerStock> getMyStocks(Long playerId, Long brokerId) {
-		return brokerDao.getStocksByPlayerAndBrokerId(playerId, brokerId);
+		return offerService.getStocksByPlayerAndBrokerId(playerId, brokerId);
 	}
 
 	@Override

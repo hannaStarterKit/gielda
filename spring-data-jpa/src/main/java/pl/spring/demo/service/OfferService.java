@@ -3,7 +3,10 @@
  */
 package pl.spring.demo.service;
 
+import java.util.List;
+
 import pl.spring.demo.entity.OfferEntity;
+import pl.spring.demo.playerModel.PlayerStock;
 
 /**
  * @author HSIENKIE
@@ -13,4 +16,6 @@ import pl.spring.demo.entity.OfferEntity;
 public interface OfferService {
 
 	OfferEntity save(OfferEntity offer);
+
+	List<PlayerStock> getStocksByPlayerAndBrokerId(Long playerId, Long brokerId);
 }

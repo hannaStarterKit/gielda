@@ -7,7 +7,6 @@ import java.util.List;
 
 import pl.spring.demo.dao.BrokerDao;
 import pl.spring.demo.entity.BrokerEntity;
-import pl.spring.demo.playerModel.PlayerStock;
 
 /**
  * @author HSIENKIE
@@ -48,12 +47,6 @@ public class BrokerDaoImpl extends AbstractDao<BrokerEntity, Long> implements Br
 	@Override
 	public Long getAccountId(Long brokerId) {
 		return this.findOne(brokerId).getAccount().getId();
-	}
-
-	@Override
-	public List<PlayerStock> getStocksByPlayerAndBrokerId(Long playerId, Long brokerId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

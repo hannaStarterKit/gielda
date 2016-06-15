@@ -3,6 +3,8 @@
  */
 package pl.spring.demo.dao;
 
+import java.util.List;
+
 import pl.spring.demo.entity.OfferEntity;
 
 /**
@@ -11,4 +13,5 @@ import pl.spring.demo.entity.OfferEntity;
  */
 public interface OfferDao extends Dao<OfferEntity, Long> {
 
+	List<OfferEntity> getStocksByPlayerAndBrokerId(Long playerId, Long brokerId);
 }

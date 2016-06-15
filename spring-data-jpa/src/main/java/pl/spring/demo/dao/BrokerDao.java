@@ -29,6 +29,4 @@ public interface BrokerDao extends Dao<BrokerEntity, Long> {
 
 	Long getAccountId(Long brokerId);
 
-	List<PlayerStock> getStocksByPlayerAndBrokerId(Long playerId, Long brokerId);
-
 }
